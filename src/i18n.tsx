@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { translations } from './translations'
+import { galleryTranslations } from './galleryTranslations'
 
 export type Language = 'en' | 'te' | 'hi'
 type LanguageContextValue = { language: Language; setLanguage: (language: Language) => void; t: (text: string) => string }
@@ -23,7 +24,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     window.addEventListener('storage', syncLanguage)
     return () => window.removeEventListener('storage', syncLanguage)
   }, [])
-  const t = (text: string) => language === 'en' ? text : translations[text]?.[language] || text
+  const t = (text: string) => language === 'en' ? text : translations[text]?.[language] || galleryTranslations[text]?.[language] || text
   return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>
 }
 

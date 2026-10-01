@@ -4,6 +4,7 @@ import Arrow from './components/Arrow'
 import AppLogo from './components/AppLogo'
 import FloatingWhatsApp from './components/FloatingWhatsApp'
 import LanguageSwitcher from './components/LanguageSwitcher'
+import CustomerGallery from './components/CustomerGallery'
 import { generalInquiry, sizeInquiry, useLanguage } from './i18n'
 import { alternatePhone, primaryPhone, sizes } from './data'
 import { InstagramIcon, PhoneIcon, WhatsAppIcon } from './components/Icons'
@@ -16,7 +17,7 @@ const FrameScene = lazy(() => import('./FrameScene'))
 
 function App() {
   const { t, language } = useLanguage()
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   const [selectedSize, setSelectedSize] = useState(4)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -58,9 +59,14 @@ function App() {
   }, [pathname])
 
   useEffect(() => {
-    window.scrollTo(0, 0)
     setMenuOpen(false)
-  }, [pathname])
+    const frame = requestAnimationFrame(() => {
+      const target = hash ? document.getElementById(hash.slice(1)) : null
+      if (target) target.scrollIntoView({ block: 'start' })
+      else window.scrollTo(0, 0)
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [pathname, hash])
 
   useEffect(() => {
     const titles: Record<string, string> = {
@@ -143,6 +149,8 @@ function App() {
         <div className="home-deep-link page-gutter"><Link className="text-link" to="/possibilities">{t("Explore more possibilities")} <Arrow diagonal /></Link></div>
       </section>
 
+      <CustomerGallery compact />
+
       <section className="marquee-section" aria-label="Brand statement"><div className="marquee-track" aria-hidden="true"><span>{t("MADE FOR THE MOMENTS THAT MATTER")} <i>✳</i> {t("MADE FOR THE MOMENTS THAT MATTER")} <i>✳</i></span><span>{t("MADE FOR THE MOMENTS THAT MATTER")} <i>✳</i> {t("MADE FOR THE MOMENTS THAT MATTER")} <i>✳</i></span></div></section>
 
       <section className="detail-section section-pad" id="craft">
@@ -157,7 +165,7 @@ function App() {
           <div className="sizes-heading" data-reveal><span className="eyebrow">{t("04 / FIND YOUR FIT")}</span><h2>{t("Room for every")}<br /><em>{t("kind of memory.")}</em></h2><p>{t("Explore our standard frame sizes. Need something different? Ask us about a custom size.")}</p><Link className="text-link text-link-light" to="/sizes">{t("Open the full size guide")} <Arrow diagonal /></Link></div>
           <div className="size-experience" data-reveal>
             <div className="size-preview"><div className="size-preview-frame" style={{ transform: `translate(-50%, -50%) scale(${size.scale})` }}><img src="/images/family-sunset.jpg" alt="Preview of a framed family photograph" /></div><span className="size-preview-caption">{t("Frame preview · proportions illustrative")}</span></div>
-            <div className="size-options"><div className="size-options-title"><span>{t("SELECT A SIZE")}</span><span>{t("INCHES")}</span></div><div className="size-button-grid">{sizes.map((option, index) => <button key={option.label} type="button" className={`size-button ${selectedSize === index ? 'is-active' : ''}`} onClick={() => setSelectedSize(index)} aria-pressed={selectedSize === index}>{option.label}</button>)}</div><div className="size-selected"><div><span>{t("STARTING AT")}</span><strong>₹{size.price.toLocaleString('en-IN')}</strong></div><span>{size.label} {t('inches')}</span></div><a className="button button-dark" href={`https://wa.me/917601012179?text=${encodeURIComponent(sizeInquiry(language, size.label))}`} target="_blank" rel="noopener noreferrer">{t("Ask about this size")} <Arrow diagonal /></a><a className="price-sheet-link" href="/images/ak-price-list.jpg" target="_blank" rel="noopener noreferrer">{t("View original price sheet")} <Arrow diagonal /></a></div>
+            <div className="size-options"><div className="size-options-title"><span>{t("SELECT A SIZE")}</span><span>{t("INCHES")}</span></div><div className="size-button-grid">{sizes.map((option, index) => <button key={option.label} type="button" className={`size-button ${selectedSize === index ? 'is-active' : ''}`} onClick={() => setSelectedSize(index)} aria-pressed={selectedSize === index}>{option.label}</button>)}</div><div className="size-selected"><div><span>{t("STARTING AT")}</span><strong>₹{size.price.toLocaleString('en-IN')}</strong></div><span>{size.label} {t('inches')}</span></div><a className="button button-dark" href={`https://wa.me/917601012179?text=${encodeURIComponent(sizeInquiry(language, size.label))}`} target="_blank" rel="noopener noreferrer">{t("Ask about this size")} <Arrow diagonal /></a><a className="price-sheet-link" href="/images/ak-price-list.png" target="_blank" rel="noopener noreferrer">{t("View original price sheet")} <Arrow diagonal /></a></div>
           </div>
         </div>
       </section>

@@ -17,7 +17,9 @@ Open the local URL printed by Vite. For a production build, run `npm run build` 
 
 ## Content and imagery
 
-- The frame sizes, prices, contact numbers, Instagram handle, logo, collage sample, and original price sheet come from the supplied website ZIP in `reference/`.
+- The contact numbers, Instagram handle, original brand reference, and collage sample come from the supplied website ZIP in `reference/`.
+- The displayed prices now follow the latest customer-supplied price poster, `public/images/ak-price-list.png`, replacing the older ZIP price sheet.
+- Eight distinct customer-supplied frame previews appear in the home collection and the filterable Possibilities gallery. Exact duplicate attachments are shown once. The viewer supports keyboard navigation, enlarged originals, and enquiries by size. Optimized JPEG previews keep the grid lighter while the original PNG files remain available in the viewer.
 - Lifestyle photos are illustrative Unsplash photographs. The collage is labeled as an AK Crafts sample; other imagery is not presented as completed customer work.
 - Three.js creates the animated frame arrangement in the hero. A static arrangement is shown on small screens, reduced-motion devices, or when WebGL is unavailable.
 - `src/components/AppLogo.tsx` provides the site logo. The matching web icon is `public/favicon.svg`.
